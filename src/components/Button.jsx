@@ -10,7 +10,7 @@ export default function Button({ children, toggleClick, secondary, ...props }) {
       " text-stone-900 hover:text-stone-600 bg-white hover:bg-stone-200";
   } else {
     classList +=
-      " text-stone-200 hover:text-stone-200 bg-stone-900 hover:bg-stone-600";
+      " text-stone-400 hover:text-stone-100 bg-stone-700 hover:bg-stone-600";
   }
   return (
     <button onClick={handleClick} className={classList} {...props}>
