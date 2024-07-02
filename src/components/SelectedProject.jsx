@@ -2,15 +2,13 @@ import Task from "./Task";
 import { useRef, useState } from "react";
 
 export default function SelectedProject({
-  addingTask,
   projects,
   id,
+  tasks,
   ondeleteProject,
+  onAddTask,
+  onDeleteTask,
 }) {
-  function createTask() {
-    addingTask();
-  }
-
   function handleDelete(id) {
     ondeleteProject(id);
     // Add delete functionality here
@@ -38,7 +36,12 @@ export default function SelectedProject({
         <p className="pb-4 whitespace-pre-wrap">{project.description}</p>
       </header>
 
-      <Task project={project} />
+      <Task
+        project={project}
+        onAddTask={onAddTask}
+        onDeleteTask={onDeleteTask}
+        tasks={tasks}
+      />
     </section>
   );
 }

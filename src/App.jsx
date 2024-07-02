@@ -4,23 +4,13 @@ import { useState, useRef } from "react";
 import NoProjectMain from "./components/NoProjectMain";
 import CreateProject from "./components/CreateProject";
 
-const PROJECT_FIRST = {
-  title: "Project1",
-  description: "Project description",
-  date: "12-12-2024",
-  tasks: ["task1", "task2"],
-};
 function App() {
   const projectData = useRef();
-
-  // const [addProject, setAddProject] = useState(false);
-  // const [addTask, setAddTask] = useState(false);
-  // const [project, setProject] = useState({});
-  // const [projectList, setProjectList] = useState([PROJECT_FIRST]);
 
   const [projectState, setProjectState] = useState({
     selectedProjectId: undefined,
     projects: [],
+    tasks: [],
   });
 
   function toggleAddProject() {
@@ -46,6 +36,7 @@ function App() {
         id: prevState.projects.length + 1,
       };
       return {
+        ...prevState,
         selectedProjectId: null,
         projects: [...prevState.projects, newProject],
       };
@@ -69,7 +60,10 @@ function App() {
       <SelectedProject
         projects={projectState.projects}
         id={projectState.selectedProjectId}
+        tasks={projectState.tasks}
         ondeleteProject={handleDeleteProject}
+        onAddTask={handleAddTask}
+        onDeleteTask={handleDeleteTask}
       ></SelectedProject>
     );
   }
@@ -89,6 +83,35 @@ function App() {
         ...prevState,
         selectedProjectId: undefined,
         projects: prevState.projects.filter((project) => project.id !== id),
+        tasks: prevState.tasks.filter((task) => task.projectId !== id), // Remove tasks related to the deleted project
+      };
+    });
+  }
+
+  function handleAddTask(task) {
+    setProjectState((prevState) => {
+      const maxId =
+        prevState.tasks.length > 0
+          ? Math.max(...prevState.tasks.map((t) => t.id))
+          : 0;
+      const taskId = maxId + 1;
+      const newTasks = {
+        text: task,
+        projectId: prevState.selectedProjectId,
+        id: taskId,
+      };
+      return {
+        ...prevState,
+        tasks: [...prevState.tasks, newTasks],
+      };
+    });
+  }
+
+  function handleDeleteTask(id) {
+    setProjectState((prevState) => {
+      return {
+        ...prevState,
+        tasks: prevState.tasks.filter((task) => task.id !== id),
       };
     });
   }
